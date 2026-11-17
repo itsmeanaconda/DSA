@@ -1,0 +1,93 @@
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+using namespace std;
+
+struct Student {
+    int id;
+    char name[50];
+    float cgpa;
+};
+
+int main() {
+    Student *s = NULL;
+    int n = 0, choice;
+
+    do {
+        cout << "\n1. Add Student";
+        cout << "\n2. Display Students";
+        cout << "\n3. Sort by Name";
+        cout << "\n4. Sort by CGPA";
+        cout << "\n5. Exit";
+        cout << "\nEnter choice: ";
+        cin >> choice;
+
+        switch(choice) {
+        case 1:
+            s = (Student*)realloc(s, (n+1)*sizeof(Student));
+
+            if(s == NULL) {
+                cout << "Memory allocation failed!";
+                return 1;
+            }
+
+            cout << "Enter ID: ";
+            cin >> s[n].id;
+
+            cout << "Enter Name: ";
+            cin >> s[n].name;
+
+            cout << "Enter CGPA: ";
+            cin >> s[n].cgpa;
+
+            n++;
+            cout << "Student Added!";
+            break;
+
+        case 2:
+            cout << "\nStudent Records:\n";
+            for(int i=0; i<n; i++) {
+                cout << s[i].id << " "
+                     << s[i].name << " "
+                     << s[i].cgpa << endl;
+            }
+            break;
+
+        case 3:
+            // Bubble Sort by Name
+            for(int i=0; i<n-1; i++) {
+                for(int j=0; j<n-i-1; j++) {
+                    if(strcmp(s[j].name, s[j+1].name) > 0) {
+                        Student temp = s[j];
+                        s[j] = s[j+1];
+                        s[j+1] = temp;
+                    }
+                }
+            }
+
+            cout << "Sorted by Name Successfully!";
+            break;
+
+        case 4:
+            // Selection Sort by CGPA
+            for(int i=0; i<n-1; i++) {
+                int minIndex = i;
+
+                for(int j=i+1; j<n; j++) {
+                    if(s[j].cgpa < s[minIndex].cgpa)
+                        minIndex = j;
+                }
+
+                Student temp = s[i];
+                s[i] = s[minIndex];
+                s[minIndex] = temp;
+            }
+
+            cout << "Sorted by CGPA Successfully!";
+            break;
+        }
+    } while(choice != 5);
+
+    free(s);
+    return 0;
+}
